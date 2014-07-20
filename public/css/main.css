@@ -1,0 +1,15 @@
+html, body {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  margin: 0;
+  padding: 0;
+}
+
+#tabletop {
+  padding: 20px;
+  background: #eee;
+}
+
+.card-wrapper {
+  padding: 10px;
+}

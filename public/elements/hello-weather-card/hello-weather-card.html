@@ -1,0 +1,99 @@
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../../bower_components/polymer-jsonp/polymer-jsonp.html">
+
+<core-style id="hello-weather-card">
+  .card-face {
+    padding: 10px;
+  }
+
+  img {
+    height: 60px;
+    margin: -12px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  h1 {
+    font-weight: 300;
+  }
+
+  #titleBar {
+    background: #dff;
+  }
+
+</core-style>
+
+<polymer-element name="hello-weather-card" extends="hello-card">
+  <template>
+    <shadow></shadow>
+    <core-style ref="hello-weather-card"></core-style>
+    <core-localstorage name="hello-weather-card-storage" value="{{ settings }}"></core-localstorage>
+
+    <core-overlay id="settingsOverlay">
+      <h1>OMG Settings</h1>
+      <button core-overlay-toggle>Cancel</button>
+    </core-overlay>
+
+    <div class="card-face">
+      <polymer-jsonp id="jsonpWeather"></polymer-jsonp>
+      <h1>{{ cityName }}</h1>
+      <table>
+        <template repeat="{{ day in days }}">
+          <tr>
+            <td>{{ day.name }}</td>
+            <td><img alt="{{ day.weatherDesc }}" src="{{ '/elements/hello-weather-card/svg/' + day.weatherType + '.svg' }}" /></td>
+            <td>{{ day.lowTemp }}/{{ day.highTemp }}</td>
+          </tr>
+        </template>
+      </table>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-weather-card', {
+
+      ready: function() {
+        this.super();
+        this.title = 'Today\'s Weather';
+        var jsonpWeather = this.$.jsonpWeather;
+        jsonpWeather.url="http://api.openweathermap.org/data/2.5/forecast/daily?q=Santa%20Clara,CA&units=imperial&callback=";
+        this.addEventListener('polymer-response', this.handleJsonpResponse);
+        jsonpWeather.go();
+      },
+
+      showSettings: function() {
+        alert('showing settings!');
+        //this.$.
+      },
+
+      handleJsonpResponse: function() {
+        var dayStrings = { "0": "Sun", "1": "Mon", "2": "Tues", "3": "Wed", "4": "Thur", "5": "Fri", "6": "Sat" };
+        var response = this.$.jsonpWeather.response;
+
+        if (response.cod != "200") {
+          alert('failed to get weather');
+        }
+        else
+        {
+          this.cityName = response.city.name;
+          var newDays = [];
+          for (var i = 0; i < 3; i++) {
+            var day = {};
+            day.highTemp = Math.round(response.list[i].temp.max).toString();
+            day.lowTemp = Math.round(response.list[i].temp.min).toString();
+            day.name = dayStrings[new Date(response.list[i].dt * 1000).getDay()];
+            day.weatherType = response.list[i].weather[0].main.toLowerCase();
+            day.weatherDesc = response.list[i].weather[0].description;
+            newDays.push(day);
+          }
+          this.days = newDays;
+        }
+      }
+    });
+
+  </script>
+
+</polymer-element>

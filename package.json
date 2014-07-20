@@ -1,0 +1,21 @@
+{
+  "name": "polymertab",
+  "description": "Polymer-based new tab site",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.6",
+    "method-override": "^2.1.1",
+    "morgan": "^1.1.1",
+    "swig": "^1.4.1"
+  },
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-concurrent": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-nodemon": "latest"
+  }
+}

@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-style/core-style.html">
+<link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
+
+
+<core-style id="helloCardStyle">
+  :host {
+    display: block;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  }
+
+  #contents {
+    background: #fff;
+    min-height: 300px;
+  }
+
+  #titleBar > div:first-child {
+    padding-left: 10px;
+    font-size: 1.3em;
+    font-weight: 400;
+  }
+
+</core-style>
+
+
+<polymer-element name="hello-card" attributes="title">
+
+  <template>
+    <core-style ref="helloCardStyle"></core-style>
+    <section id="contents" vertical layout>
+      <header id="titleBar" center horizontal layout>
+        <div flex>{{ title }}</div>
+        <div>
+          <core-icon-button on-click="{{ showSettings }}" id="btnSettings" icon="settings"></core-icon-button>
+          <core-icon-button on-click="{{ close }}" id="btnClose" icon="close"></core-icon-button>
+        </div>
+      </header>
+      <article flex id="placeholder"></article>
+    </div>
+  </template>
+
+  <script>
+    Polymer('hello-card', {
+      ready: function () {
+        for (var i = this.shadowRoot.childNodes.length - 1; i >= 0; i--) {
+          var child = this.shadowRoot.childNodes[i];
+          if (!child.tagName || (child.tagName && child.tagName.toLowerCase() != "shadow")) {
+            if (this.$.placeholder.firstChild) {
+              this.$.placeholder.insertBefore(child, this.$.placeholder.firstChild);
+            } else {
+              this.$.placeholder.appendChild(child);
+            }
+          }
+        }
+      },
+
+      close: function () {
+        this.parentNode.removeChild(this);
+      }
+    });
+  </script>
+
+</polymer-element>
