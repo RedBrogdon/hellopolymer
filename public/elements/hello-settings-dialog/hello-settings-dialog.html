@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/core-transition/core-transition-css.html">
+<link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
+
+<polymer-element name="hello-dialog" attributes="opened autoCloseDisabled">
+	<template>
+		<style>
+
+			:host {
+				box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 13px;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				overflow: hidden;
+				background: white;
+				padding:30px 42px;
+				outline: 1px solid rgba(0,0,0,0.2);
+				box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+			}
+
+		</style>
+		<core-overlay id="overlay" layered backdrop opened="{{opened}}" autoCloseDisabled="{{autoCloseDisabled}}"  transition="core-transition-center">
+		  <content></content>
+    </core-overlay>
+	</template>
+	<script>
+
+  	Polymer('hello-dialog', {
+
+  		ready: function() {
+  			this.$.overlay.target = this;
+  		},
+
+  		showDialog: function() {
+  			this.$.overlay.open();
+  		},
+
+      hideDialog: function() {
+        this.$.overlay.close();
+      }
+
+  	});
+
+	</script>
+</polymer-element>
+
+<!-- an element that uses the x-dialog element and core-overlay -->
+<polymer-element name="hello-settings-dialog-content" attributes="cardName">
+	<template>
+		<h2>Settings for {{ cardName }}</h2>
+
+		<div>
+    	<content></content>
+		</div>
+
+    <button on-click="{{ okHandler }}">Ok</button>
+	</template>
+	<script>
+
+  	Polymer('hello-settings-dialog-content', {
+
+      ready: function() {
+        if (this.parentNode.tagName.toLowerCase() != 'hello-dialog') {
+          console.log('A hello-settings-dialog-content element\'s parent mut be a hello-dialog element.');
+        }
+      },
+
+      okHandler: function() {
+        alert('firing');
+        this.fire('ok', {});
+        this.parentNode.hideDialog();
+      },
+
+      cancelHandler: function() {
+        this.parentNode.hideDialog();
+      }
+
+	  });
+
+	</script>
+</polymer-element>

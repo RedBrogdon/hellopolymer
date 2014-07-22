@@ -1,8 +1,12 @@
 <link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
 <link rel="import" href="../../bower_components/polymer-jsonp/polymer-jsonp.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
 
 <core-style id="hello-weather-card">
-  .card-face {
+
+  .cardFace {
     padding: 10px;
   }
 
@@ -25,18 +29,19 @@
 
 </core-style>
 
-<polymer-element name="hello-weather-card" extends="hello-card">
+<polymer-element extends="hello-card" name="hello-weather-card">
   <template>
     <shadow></shadow>
     <core-style ref="hello-weather-card"></core-style>
-    <core-localstorage name="hello-weather-card-storage" value="{{ settings }}"></core-localstorage>
+    <core-localstorage id="settingsStorage" name="hello-weather-card-storage" value="{{ settings }}"></core-localstorage>
 
-    <core-overlay id="settingsOverlay">
-      <h1>OMG Settings</h1>
-      <button core-overlay-toggle>Cancel</button>
-    </core-overlay>
+    <hello-dialog on-ok="{{ settingsOkHandler }}" id="settingsDialog">
+      <hello-settings-dialog-content id="settingsDialogContent" cardName="Weather">
+        <paper-input floatingLabel label="Your Location" value="{{ settings.userLocation }}"></paper-input>
+      </hello-settings-dialog-content>
+    </hello-dialog>
 
-    <div class="card-face">
+    <div class="cardFace">
       <polymer-jsonp id="jsonpWeather"></polymer-jsonp>
       <h1>{{ cityName }}</h1>
       <table>
@@ -55,25 +60,37 @@
 
     Polymer('hello-weather-card', {
 
-      ready: function() {
-        this.super();
-        this.title = 'Today\'s Weather';
-        var jsonpWeather = this.$.jsonpWeather;
-        jsonpWeather.url="http://api.openweathermap.org/data/2.5/forecast/daily?q=Santa%20Clara,CA&units=imperial&callback=";
-        this.addEventListener('polymer-response', this.handleJsonpResponse);
-        jsonpWeather.go();
+      observe: {
+        'settings.userLocation': 'loadWeatherAsync'
       },
 
-      showSettings: function() {
-        alert('showing settings!');
-        //this.$.
+      ready: function() {
+        this.title = 'Today\'s Weather';
+        this.super();
+      },
+
+      showSettingsDialog: function() {
+        this.$.settingsDialog.showDialog();
+      },
+
+      settingsOkHandler: function() {
+        this.$.settingsStorage.save(); // necessary because we're using an object as the value to be stored, and the ref doesn't change
+      },
+
+      loadWeatherAsync: function() {
+        if (this.settings.userLocation) {
+          var jsonpWeather = this.$.jsonpWeather;
+          jsonpWeather.url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + encodeURIComponent(this.settings.userLocation) + "&units=imperial&callback=";
+          this.addEventListener('polymer-response', this.handleJsonpResponse);
+          jsonpWeather.go();
+        }
       },
 
       handleJsonpResponse: function() {
         var dayStrings = { "0": "Sun", "1": "Mon", "2": "Tues", "3": "Wed", "4": "Thur", "5": "Fri", "6": "Sat" };
         var response = this.$.jsonpWeather.response;
 
-        if (response.cod != "200") {
+        if (!response || response.cod != "200") {
           alert('failed to get weather');
         }
         else
