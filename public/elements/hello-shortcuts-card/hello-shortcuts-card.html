@@ -1,0 +1,82 @@
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
+
+<core-style id="hello-shortcuts-card">
+
+  .cardFace {
+    padding: 10px;
+  }
+
+  img {
+    height: 60px;
+    margin: -12px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  h1 {
+    font-weight: 300;
+  }
+
+  .shortcutInputContainer {
+
+  }
+
+  .shortcutLink {
+    display: block;
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-shortcuts-card">
+  <template>
+    <shadow></shadow>
+    <core-style ref="hello-shortcuts-card"></core-style>
+    <core-localstorage on-core-localstorage-load="{{ onSettingsLoaded }}" id="settingsStorage" name="hello-shortcuts-card-storage" value="{{ settings }}"></core-localstorage>
+
+    <hello-dialog on-ok="{{ settingsOkHandler }}" id="settingsDialog">
+      <hello-settings-dialog-content id="settingsDialogContent" cardName="Weather">
+        <div class="shortcutInputContainer">
+          <paper-input floatingLabel label="Name for Shortcut One" value="{{ settings.shortcut1Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut One" value="{{ settings.shortcut1Url }}"></paper-input>
+        </div>
+      </hello-settings-dialog-content>
+    </hello-dialog>
+
+    <div class="cardFace">
+      <a class="shortcutLink" href="{{ settings.shortcut1Url }}">{{ settings.shortcut1Name }}</a>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-shortcuts-card', {
+
+      ready: function() {
+        this.title = 'Quicklinks';
+        this.super();
+      },
+
+      onSettingsLoaded: function() {
+        if (this.settings === 'undefined') {
+          this.settings = {};
+        }
+      },
+
+      showSettingsDialog: function() {
+        this.$.settingsDialog.showDialog();
+      },
+
+      settingsOkHandler: function() {
+        this.$.settingsStorage.save(); // necessary because we're using an object as the value to be stored, and the ref doesn't change
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

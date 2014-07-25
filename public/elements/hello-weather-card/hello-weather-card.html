@@ -23,10 +23,6 @@
     font-weight: 300;
   }
 
-  #titleBar {
-    background: #dff;
-  }
-
 </core-style>
 
 <polymer-element extends="hello-card" name="hello-weather-card">
@@ -80,7 +76,10 @@
       loadWeatherAsync: function() {
         if (this.settings.userLocation) {
           var jsonpWeather = this.$.jsonpWeather;
-          jsonpWeather.url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + encodeURIComponent(this.settings.userLocation) + "&units=imperial&callback=";
+          var pleaseDontStealMyId = 'f868e7d493adff71ff83db3cb814d976';
+          jsonpWeather.url = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=' +
+                             encodeURIComponent(this.settings.userLocation) +
+                             '&units=imperial&APPID=' + pleaseDontStealMyId + '&callback=';
           this.addEventListener('polymer-response', this.handleJsonpResponse);
           jsonpWeather.go();
         }
