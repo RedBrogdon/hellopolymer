@@ -43,12 +43,39 @@
         <div class="shortcutInputContainer">
           <paper-input floatingLabel label="Name for Shortcut One" value="{{ settings.shortcut1Name }}"></paper-input>
           <paper-input floatingLabel label="Url for Shortcut One" value="{{ settings.shortcut1Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Two" value="{{ settings.shortcut2Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Two" value="{{ settings.shortcut2Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Three" value="{{ settings.shortcut3Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Three" value="{{ settings.shortcut3Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Four" value="{{ settings.shortcut4Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Four" value="{{ settings.shortcut4Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Five" value="{{ settings.shortcut5Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Five" value="{{ settings.shortcut5Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Six" value="{{ settings.shortcut6Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Six" value="{{ settings.shortcut6Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Seven" value="{{ settings.shortcut7Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Seven" value="{{ settings.shortcut7Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Eight" value="{{ settings.shortcut8Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Eight" value="{{ settings.shortcut8Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Nine" value="{{ settings.shortcut9Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Nine" value="{{ settings.shortcut9Url }}"></paper-input>
+          <paper-input floatingLabel label="Name for Shortcut Ten" value="{{ settings.shortcut10Name }}"></paper-input>
+          <paper-input floatingLabel label="Url for Shortcut Ten" value="{{ settings.shortcut10Url }}"></paper-input>
         </div>
       </hello-settings-dialog-content>
     </hello-dialog>
 
     <div class="cardFace">
-      <a class="shortcutLink" href="{{ settings.shortcut1Url }}">{{ settings.shortcut1Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut1Url }}">{{ settings.shortcut1Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut2Url }}">{{ settings.shortcut2Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut3Url }}">{{ settings.shortcut3Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut4Url }}">{{ settings.shortcut4Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut5Url }}">{{ settings.shortcut5Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut6Url }}">{{ settings.shortcut6Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut7Url }}">{{ settings.shortcut7Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut8Url }}">{{ settings.shortcut8Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut9Url }}">{{ settings.shortcut9Name }}</a>
+      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut10Url }}">{{ settings.shortcut10Name }}</a>
     </div>
   </template>
 
@@ -57,7 +84,7 @@
     Polymer('hello-shortcuts-card', {
 
       ready: function() {
-        this.title = 'Quicklinks';
+        this.titleText = 'Quicklinks';
         this.super();
       },
 

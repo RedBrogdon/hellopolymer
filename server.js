@@ -1,11 +1,17 @@
 
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var logger = require('morgan');
-var router = express.Router();
-var swig = require('swig');
+// Set Dev as the default config unless told otherwise by command line arguments
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+var express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
+    logger = require('morgan'),
+    router = express.Router(),
+    swig = require('swig'),
+    config = require('./config/config'),
+    LRU = require('lru-cache');
+
 
 function logErrors(err, req, res, next) {
   console.error(err.stack);
@@ -26,15 +32,19 @@ function errorHandler(err, req, res, next) {
 }
 
 
+// Set up info cache
+
+global.infoCache = LRU(100);
 
 
-// Setup routes
+// Set up routes
 
-router.use(logger());
-require('./app/routes/home.js')(app);
+router.use(logger(':remote-addr :method :url'));
+require('./app/routes/home.js')(router);
+require('./app/routes/info.js')(router);
 
 
-// Setup Swig
+// Set up Swig
 
 swig.setDefaults({ cache: false });
 
@@ -43,7 +53,8 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/app/views');
 
-// Setup middleware
+
+// Set up middleware
 
 app.use(express.static(__dirname + '/public'));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));

@@ -1,0 +1,101 @@
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<core-style id="hello-newswire-card">
+
+  .cardFace {
+    padding: 10px;
+  }
+
+  img {
+    height: 60px;
+    margin: -12px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  h1 {
+    font-weight: 300;
+  }
+
+  .newswireLink {
+    display: block;
+    padding-bottom: 5px;
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-newswire-card">
+  <template>
+    <shadow></shadow>
+    <core-style ref="hello-newswire-card"></core-style>
+    <core-ajax on-core-error="{{ handleAjaxError }}" on-core-response="{{ handleAjaxResponse }}"
+      auto url="/info/NYTNewswire" handleAs="json" id="ajaxNewswire"></core-ajax>
+
+    <div class="cardFace">
+      <core-pages id="articlePages" selected="0">
+        <div>
+          <template repeat="{{ article in articles[0] }}">
+            <a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a>
+          </template>
+        </div>
+        <div>
+          <template repeat="{{ article in articles[1] }}">
+            <a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a>
+          </template>
+        </div>
+        <div>
+          <template repeat="{{ article in articles[2] }}">
+            <a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a>
+          </template>
+        </div>
+        <div>
+          <template repeat="{{ article in articles[3] }}">
+            <a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a>
+          </template>
+        </div>
+      </core-pages>
+
+      <paper-button id="nextButton" label="Next" on-click="{{ showNextPage }}"></paper-button>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-newswire-card', {
+
+      ready: function() {
+        this.titleText = 'NYT Newswire';
+        this.super();
+      },
+
+      handleAjaxResponse: function(e) {
+        this.articles = [];
+        var i;
+
+        for (i = 0; i < 4; i++) {
+          this.articles.push([]);
+        }
+
+        for (i = 0; i < Math.min(20, e.detail.response.length); i++) {
+          this.articles[Math.floor(i / 5)].push(e.detail.response[i]);
+        }
+      },
+
+      handleAjaxError: function(e) {
+        alert('Failed to load newswire.');
+      },
+
+      showNextPage: function() {
+        this.$.articlePages.selected = (this.$.articlePages.selected + 1) % 4;
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

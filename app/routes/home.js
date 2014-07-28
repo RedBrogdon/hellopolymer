@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = function(app) {
+module.exports = function(router) {
 
     // Home route
     var home = require('../controllers/home');
-    app.get('/', home.index);
-    app.get('/fiddle', home.fiddle);
+    router.get('/', home.index);
+    router.get('/fiddle', home.fiddle);
 };
