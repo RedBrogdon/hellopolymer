@@ -1,7 +1,8 @@
 <link rel="import" href="../hello-card/hello-card.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../../bower_components/core-pages/core-pages.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 
 <core-style id="hello-newswire-card">
 
@@ -27,6 +28,10 @@
     padding-bottom: 5px;
   }
 
+  core-pages {
+    min-height: 190px;
+  }
+
 </core-style>
 
 <polymer-element extends="hello-card" name="hello-newswire-card">
@@ -37,7 +42,7 @@
       auto url="/info/NYTNewswire" handleAs="json" id="ajaxNewswire"></core-ajax>
 
     <div class="cardFace">
-      <core-pages id="articlePages" selected="0">
+      <core-pages id="articlePages" selected="{{ selectedPage }}">
         <div>
           <template repeat="{{ article in articles[0] }}">
             <a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a>
@@ -60,7 +65,12 @@
         </div>
       </core-pages>
 
-      <paper-button id="nextButton" label="Next" on-click="{{ showNextPage }}"></paper-button>
+      <paper-radio-group selected="{{ selectedPage }}">
+        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+      </paper-radio-group>
     </div>
   </template>
 
@@ -70,7 +80,10 @@
 
       ready: function() {
         this.titleText = 'NYT Newswire';
+        this.selectedPage = 0;
+        this.carouselRunning = true;
         this.super();
+        this.async(this.stepCarousel, null, 5000);
       },
 
       handleAjaxResponse: function(e) {
@@ -91,9 +104,19 @@
       },
 
       showNextPage: function() {
-        this.$.articlePages.selected = (this.$.articlePages.selected + 1) % 4;
-      }
+        this.$.articlePages.selected = (this.$.articlePages.selected + 1) % this.$.articlePages.children.length;
+      },
 
+      radioClickHandler: function() {
+        this.carouselRunning = false;
+      },
+
+      stepCarousel: function() {
+        if (this.carouselRunning) {
+          this.selectedPage = (this.selectedPage + 1) % this.$.articlePages.children.length
+          this.async(this.stepCarousel, null, 5000);
+        }
+      }
     });
 
   </script>
