@@ -3,27 +3,10 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
 
-<core-style id="hello-shortcuts-card">
+<core-style id="helloShortcutsCardStyle">
 
   .cardFace {
     padding: 10px;
-  }
-
-  img {
-    height: 60px;
-    margin: -12px;
-  }
-
-  table {
-    width: 100%;
-  }
-
-  h1 {
-    font-weight: 300;
-  }
-
-  .shortcutInputContainer {
-
   }
 
   .shortcutLink {
@@ -34,8 +17,7 @@
 
 <polymer-element extends="hello-card" name="hello-shortcuts-card">
   <template>
-    <shadow></shadow>
-    <core-style ref="hello-shortcuts-card"></core-style>
+    <core-style ref="helloShortcutsCardStyle"></core-style>
     <core-localstorage on-core-localstorage-load="{{ onSettingsLoaded }}" id="settingsStorage" name="hello-shortcuts-card-storage" value="{{ settings }}"></core-localstorage>
 
     <hello-dialog on-ok="{{ settingsOkHandler }}" id="settingsDialog">
@@ -84,7 +66,6 @@
     Polymer('hello-shortcuts-card', {
 
       ready: function() {
-        this.titleText = 'Quicklinks';
         this.super();
       },
 

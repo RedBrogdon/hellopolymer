@@ -1,0 +1,61 @@
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-style/core-style.html">
+<link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
+
+
+<core-style id="helloCardChromeStyle">
+
+  :host {
+    display: inline-block;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    position: relative;
+    background: #fff;
+    height: 300px;
+    width: 300px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+
+  #buttonContainer {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+
+</core-style>
+
+
+<polymer-element name="hello-card-chrome" attributes="title">
+
+  <template>
+    <core-style ref="helloCardChromeStyle"></core-style>
+    <div id="buttonContainer">
+      <core-icon-button on-click="{{ showSettingsDialog }}" id="btnSettings" icon="settings"></core-icon-button>
+      <core-icon-button on-click="{{ close }}" id="btnClose" icon="close"></core-icon-button>
+    </div>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer('hello-card-chrome', {
+
+      ready: function () {
+      },
+
+      close: function () {
+        this.parentNode.removeChild(this);
+      },
+
+      showSettingsDialog: function () {
+        for (var i = 0; i < this.children.length; i++) {
+          if (this.children[i] instanceof HelloCard) {
+            this.children[i].showSettingsDialog();
+            return; // only do one, even in the unlikely event that there are two matches
+          }
+        }
+      }
+
+    });
+  </script>
+
+</polymer-element>

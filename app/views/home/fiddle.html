@@ -1,26 +1,32 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-  <script src="bower_components/platform/platform.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/main.css">
-  <link rel="import" href="elements/hello-card/hello-card.html">
-  <link rel="import" href="elements/hello-weather-card/hello-weather-card.html">
-</head>
+<script type="text/javascript">
 
-<style>
-</style>
+  var params = {}, queryString = location.hash.substring(1),
+      regex = /([^&=]+)=([^&]*)/g, m;
+  while (m = regex.exec(queryString)) {
+    params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+  }
 
-<body unresolved>
+  // And send the token over to the server
+  var req = new XMLHttpRequest();
+  // consider using POST so query isn't logged
+  req.open('GET', 'https://' + window.location.host + '/catchtoken?' + queryString, true);
 
-  <div>
-    <hello-card></hello-card>
-  </div>
-  <br><br>
-  <div>
-    <hello-weather-card></hello-weather-card>
-  </div>
+  req.onreadystatechange = function (e) {
+    if (req.readyState == 4) {
+       if(req.status == 200){
+         window.location = params['state']
+     }
+    else if(req.status == 400) {
+          alert('There was an error processing the token.')
+      }
+      else {
+        alert('something else other than 200 was returned')
+      }
+    }
+  };
+  req.send(null);
 
-</body>
+</script>
 
-</html>
+https://accounts.google.com/o/oauth2/auth

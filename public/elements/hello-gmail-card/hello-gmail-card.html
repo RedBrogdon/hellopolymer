@@ -1,0 +1,66 @@
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<core-style id="hello-gmail-card">
+
+  .cardFace {
+    padding: 10px;
+  }
+
+  img {
+    height: 60px;
+    margin: -12px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  h1 {
+    font-weight: 300;
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-gmail-card">
+  <template>
+    <shadow></shadow>
+    <core-style ref="hello-gmail-card"></core-style>
+
+    <div class="cardFace">
+
+    <button on-click="{{ spawnAuthWindow }}">Authorize</button>
+
+    </div>
+
+  </template>
+
+  <script>
+
+    Polymer('hello-gmail-card', {
+
+      ready: function() {
+        this.titleText = 'Gmail';
+        this.super();
+      },
+
+      spawnAuthWindow: function() {
+        var authUrl = 'https://accounts.google.com/o/oauth2/auth' +
+          '?response_type=token' +
+          '&client_id=704030484069-da1a5fktic09f70f608j0b2hvp19qp11.apps.googleusercontent.com' +
+          '&redirect_uri=' + encodeURIComponent('http://dev.helloboxes.com:3000/gmailoauth2callback') +
+          '&scope=' + encodeURIComponent('https://www.googleapis.com/auth/gmail.readonly') +
+          '&approval_prompt=auto';
+
+        var windowObjectReference;
+        var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+        windowObjectReference = window.open(authUrl, 'Authing', 'height=600,width=400,menubar=no,location=yes,resizable=no,scrollbars=no,status=no');
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

@@ -8,8 +8,5 @@ html, body {
 #tabletop {
   padding: 20px;
   background: #eee;
-}
-
-.card-wrapper {
-  padding: 10px;
+  height: 100%;
 }

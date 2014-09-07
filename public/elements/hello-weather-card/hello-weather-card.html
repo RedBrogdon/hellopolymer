@@ -29,7 +29,7 @@
   <template>
     <shadow></shadow>
     <core-style ref="hello-weather-card"></core-style>
-    <core-localstorage id="settingsStorage" name="hello-weather-card-storage" value="{{ settings }}"></core-localstorage>
+    <core-localstorage on-core-localstorage-load="{{ onSettingsLoaded }}" id="settingsStorage" name="hello-weather-card-storage" value="{{ settings }}"></core-localstorage>
 
     <hello-dialog on-ok="{{ settingsOkHandler }}" id="settingsDialog">
       <hello-settings-dialog-content id="settingsDialogContent" cardName="Weather">
@@ -71,6 +71,12 @@
 
       settingsOkHandler: function() {
         this.$.settingsStorage.save(); // necessary because we're using an object as the value to be stored, and the ref doesn't change
+      },
+
+      onSettingsLoaded: function() {
+        if (this.settings === 'undefined') {
+          this.settings = { userLocation: 'Santa Clara, CA' };
+        }
       },
 
       loadWeatherAsync: function() {
