@@ -15,6 +15,11 @@
     padding-bottom: 5px;
   }
 
+  #articlePages {
+    height: 245px;
+    overflow: hidden;
+  }
+
 </core-style>
 
 <polymer-element extends="hello-card" name="hello-newswire-card">
@@ -47,7 +52,7 @@
         </div>
       </core-pages>
 
-      <paper-radio-group selected="{{ selectedPage }}">
+      <paper-radio-group id="pager" selected="{{ selectedPage }}">
         <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
         <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
         <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>

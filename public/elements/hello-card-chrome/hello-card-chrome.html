@@ -2,6 +2,8 @@
 <link rel="import" href="../../bower_components/core-style/core-style.html">
 <link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
 
+<link rel="import" href="../../bower_components/core-menu-button/core-menu-button.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
 
 <core-style id="helloCardChromeStyle">
 
@@ -30,8 +32,10 @@
   <template>
     <core-style ref="helloCardChromeStyle"></core-style>
     <div id="buttonContainer">
-      <core-icon-button on-click="{{ showSettingsDialog }}" id="btnSettings" icon="settings"></core-icon-button>
-      <core-icon-button on-click="{{ close }}" id="btnClose" icon="close"></core-icon-button>
+      <core-menu-button id="btnMenu" icon="menu" selected="0">
+        <core-icon-button on-click="{{ showSettingsDialog }}" id="btnSettings" icon="settings"></core-icon-button>
+        <core-icon-button on-click="{{ close }}" id="btnClose" icon="close"></core-icon-button>
+      </core-menu-button>
     </div>
     <content></content>
   </template>
@@ -43,10 +47,13 @@
       },
 
       close: function () {
+        this.$.btnMenu.toggle();
         this.parentNode.removeChild(this);
       },
 
       showSettingsDialog: function () {
+        this.$.btnMenu.toggle();
+
         for (var i = 0; i < this.children.length; i++) {
           if (this.children[i] instanceof HelloCard) {
             this.children[i].showSettingsDialog();
