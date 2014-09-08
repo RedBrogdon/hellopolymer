@@ -9,8 +9,29 @@
     padding: 10px;
   }
 
+  ul {
+    margin: 0px;
+    padding-left: 0px;
+  }
+
+  h3 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+  }
+
+  li {
+    font-size: 15px;
+    list-style-type: none;
+    padding-left: 0px;
+    margin: 0px 0px 5px 0px;
+  }
+
   .shortcutLink {
-    display: block;
+    text-decoration: none;
+  }
+
+  .shortcutLink:hover {
+    text-decoration: underline;
   }
 
 </core-style>
@@ -48,16 +69,19 @@
     </hello-dialog>
 
     <div class="cardFace">
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut1Url }}">{{ settings.shortcut1Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut2Url }}">{{ settings.shortcut2Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut3Url }}">{{ settings.shortcut3Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut4Url }}">{{ settings.shortcut4Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut5Url }}">{{ settings.shortcut5Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut6Url }}">{{ settings.shortcut6Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut7Url }}">{{ settings.shortcut7Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut8Url }}">{{ settings.shortcut8Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut9Url }}">{{ settings.shortcut9Name }}</a>
-      <a class="shortcutLink" target="_blank" href="{{ settings.shortcut10Url }}">{{ settings.shortcut10Name }}</a>
+      <h3>Quicklinks</h3>
+      <ul>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut1Url }}">{{ settings.shortcut1Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut2Url }}">{{ settings.shortcut2Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut3Url }}">{{ settings.shortcut3Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut4Url }}">{{ settings.shortcut4Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut5Url }}">{{ settings.shortcut5Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut6Url }}">{{ settings.shortcut6Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut7Url }}">{{ settings.shortcut7Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut8Url }}">{{ settings.shortcut8Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut9Url }}">{{ settings.shortcut9Name }}</a></li>
+        <li><a class="shortcutLink" target="_blank" href="{{ settings.shortcut10Url }}">{{ settings.shortcut10Name }}</a></li>
+      </ul>
     </div>
   </template>
 

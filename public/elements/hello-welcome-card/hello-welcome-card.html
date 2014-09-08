@@ -1,0 +1,57 @@
+<link rel="import" href="../hello-card/hello-card.html">
+
+<core-style id="helloWelcomeCardStyle">
+
+  .cardFace {
+    padding: 10px;
+  }
+
+  h2 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin: 0px 0px 10px 0px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline.
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-welcome-card">
+  <template>
+    <core-style ref="helloWelcomeCardStyle"></core-style>
+
+    <div class="cardFace" vertical layout center>
+      <h2>Welcome</h2>
+      <p>
+        HelloBoxes is a "new tab" page created with
+        <a target="_blank" href="http://www.polymer-project.org">Google Polymer</a>.
+      </p>
+      <p>
+        If you have questions or suggestions, contact
+        <a target="_blank" href="http://www.twitter.com/RedBrogdon">@RedBrogdon</a>.
+      </p>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-welcome-card', {
+
+      ready: function() {
+        this.super();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
