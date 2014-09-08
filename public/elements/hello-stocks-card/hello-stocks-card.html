@@ -1,0 +1,137 @@
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
+<link rel="import" href="../../bower_components/polymer-jsonp/polymer-jsonp.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
+
+<core-style id="helloStocksCardStyle">
+
+  .cardFace {
+    padding: 10px;
+  }
+
+  ul {
+    margin: 0px;
+    padding-left: 0px;
+  }
+
+  h3 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+  }
+
+  li {
+    font-size: 15px;
+    list-style-type: none;
+    padding-left: 0px;
+    margin: 0px 0px 5px 0px;
+  }
+
+  .newswireLink {
+    text-decoration: none;
+  }
+
+  .newswireLink:hover {
+    text-decoration: underline;
+  }
+
+  #articlePages {
+    height: 245px;
+    overflow: hidden;
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-stocks-card">
+  <template>
+    <core-style ref="helloStocksCardStyle"></core-style>
+    <polymer-jsonp id="jsonpStocks"></polymer-jsonp>
+    <core-localstorage on-core-localstorage-load="{{ onSettingsLoaded }}" id="settingsStorage"
+      name="hello-stocks-card-storage" value="{{ settings }}"></core-localstorage>
+
+    <hello-dialog on-ok="{{ settingsOkHandler }}" id="settingsDialog">
+      <hello-settings-dialog-content id="settingsDialogContent" cardName="Stocks">
+        <div class="shortcutInputContainer">
+          <paper-input floatingLabel label="Stock #1" value="{{ settings.stockOne }}"></paper-input>
+          <paper-input floatingLabel label="Stock #2" value="{{ settings.stockTwo }}"></paper-input>
+          <paper-input floatingLabel label="Stock #3" value="{{ settings.stockThree }}"></paper-input>
+        </div>
+      </hello-settings-dialog-content>
+    </hello-dialog>
+
+    <div class="cardFace">
+      {{ stockOne }}: {{ stockOnePrice }} <br>
+      {{ stockTwo }}: {{ stockTwoPrice }} <br>
+      {{ stockThree }}: {{ stockThreePrice }} <br>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-stocks-card', {
+
+      observe: {
+        'settings.stockOne': 'loadStocksAsync',
+        'settings.stockTwo': 'loadStocksAsync',
+        'settings.stockThree': 'loadStocksAsync'
+      },
+
+      ready: function() {
+        this.super();
+      },
+
+      showSettingsDialog: function() {
+        this.$.settingsDialog.showDialog();
+      },
+
+      settingsOkHandler: function() {
+        this.$.settingsStorage.save(); // necessary because we're using an object as the value to be stored, and the ref doesn't change
+      },
+
+      onSettingsLoaded: function() {
+        if (this.settings === 'undefined') {
+          this.settings = { stockOne: 'GOOG', stockTwo: 'MSFT', stockThree: 'APPL' };
+        }
+      },
+
+      loadStocksAsync: function() {
+        if (this.settings.stockOne) {
+          var urlStart = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(',
+            urlFinish = ')%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json&callback=',
+            labelList = '%22' + this.settings.stockOne + '%22';
+
+          if (this.settings.stockTwo) {
+            labelList += '%2C%22' + this.settings.stockTwo + '%22';
+          }
+
+          if (this.settings.stockThree) {
+            labelList += '%2C%22' + this.settings.stockThree + '%22';
+          }
+
+          var jsonpStocks = this.$.jsonpStocks;
+          jsonpStocks.url = urlStart + labelList + urlFinish;
+          this.addEventListener('polymer-response', this.handleJsonpResponse);
+          jsonpStocks.go();
+        }
+      },
+
+      handleJsonpResponse: function() {
+        var response = this.$.jsonpStocks.response;
+
+        if (!response || !response.query || !response.query.results || !response.query.results.quote) {
+          alert('failed to get stocks');
+        } else {
+          this.stockOne = response.query.results.quote[0].symbol;
+          this.stockOnePrice = response.query.results.quote[0].Bid;
+          this.stockTwo = response.query.results.quote[1].symbol;
+          this.stockTwoPrice = response.query.results.quote[1].Bid;
+          this.stockThree = response.query.results.quote[2].symbol;
+          this.stockThreePrice = response.query.results.quote[2].Bid;
+        }
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
