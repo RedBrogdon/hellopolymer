@@ -1,0 +1,106 @@
+<link rel="import" href="../hello-card/hello-card.html">
+
+<core-style id="helloClockCardStyle">
+
+  .cardFace {
+    padding: 10px;
+    height: 280px;
+  }
+
+  #time {
+    font-size: 80px;
+    font-weight: 300;
+  }
+
+  #day {
+    font-size: 25px;
+  }
+
+  #date {
+    font-size: 20px;
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-clock-card">
+  <template>
+    <core-style ref="helloClockCardStyle"></core-style>
+
+    <div class="cardFace" vertical layout center center-justified>
+      <div id="time">{{ hour | formatHour }}:{{ minute | formatWithLeadingZeros }}</div>
+      <div id="day">{{ dayOfWeek | formatDayOfWeek }}</div>
+      <div id="date">{{ month | formatMonth }} {{ dayOfMonth | formatDayOfMonth}}, {{ year }}</div>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-clock-card', {
+
+      ready: function() {
+        this.async(this.stepClock, null, 0);
+      },
+
+      stepClock: function() {
+        var now = new Date();
+        this.hour = now.getHours();
+        this.minute = now.getMinutes();
+        this.dayOfWeek = now.getDay();
+        this.dayOfMonth = now.getDate();
+        this.month = now.getMonth();
+        this.year = now.getFullYear();
+        this.async(this.stepClock, null, 1000);
+      },
+
+      formatWithLeadingZeros: function (val) {
+        return ("0" + val).slice(-2);
+      },
+
+      formatDayOfWeek: function (val) {
+        switch(val) {
+          case 0: return 'Sunday';
+          case 1: return 'Monday';
+          case 2: return 'Tuesday';
+          case 3: return 'Wednesday';
+          case 4: return 'Thursday';
+          case 5: return 'Friday';
+          default: return 'Saturday';
+        }
+      },
+
+      formatDayOfMonth: function (val) {
+        switch (val % 10) {
+          case 1: return val + 'st';
+          case 2: return val + 'nd';
+          case 3: return val + 'rd';
+          default: return val + 'th';
+        }
+      },
+
+      formatMonth: function (val) {
+        switch (val) {
+          case 0: return 'January';
+          case 1: return 'February';
+          case 2: return 'March';
+          case 3: return 'April';
+          case 4: return 'May';
+          case 5: return 'June';
+          case 6: return 'July';
+          case 7: return 'August';
+          case 8: return 'September';
+          case 9: return 'October';
+          case 10: return 'November';
+          default: return 'December';
+        }
+      },
+
+      formatHour: function (val) {
+        var remainder = val % 12;
+        return (remainder == 0) ? 12 : remainder;
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
