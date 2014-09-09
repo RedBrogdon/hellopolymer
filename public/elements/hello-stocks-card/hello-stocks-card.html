@@ -7,37 +7,41 @@
 <core-style id="helloStocksCardStyle">
 
   .cardFace {
+    height: 280px;
     padding: 10px;
   }
 
-  ul {
-    margin: 0px;
-    padding-left: 0px;
-  }
-
-  h3 {
-    margin-top: 0px;
-    margin-bottom: 5px;
-  }
-
-  li {
-    font-size: 15px;
-    list-style-type: none;
-    padding-left: 0px;
-    margin: 0px 0px 5px 0px;
-  }
-
-  .newswireLink {
+  .stockLink {
     text-decoration: none;
   }
 
-  .newswireLink:hover {
+  .stockLink:hover {
     text-decoration: underline;
   }
 
-  #articlePages {
-    height: 245px;
-    overflow: hidden;
+  .stockSymbol {
+    font-size: 30px;
+  }
+
+  .stockPriceLine {
+    margin-bottom: 10px;
+  }
+
+  .stockPriceLine span:nth-child(1) {
+    font-size: 15px;
+    color: #a66;
+  }
+
+  .stockPriceLine span:nth-child(3) {
+    font-size: 15px;
+    color: #6a6;
+  }
+
+  .stockPriceLine span:nth-child(2) {
+    font-size: 23px;
+    font-weight: 400;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
 </core-style>
@@ -59,10 +63,17 @@
       </hello-settings-dialog-content>
     </hello-dialog>
 
-    <div class="cardFace">
-      {{ stockOne }}: {{ stockOnePrice }} <br>
-      {{ stockTwo }}: {{ stockTwoPrice }} <br>
-      {{ stockThree }}: {{ stockThreePrice }} <br>
+    <div class="cardFace" vertical layout center center-justified>
+      <template repeat="{{ stocks }}">
+        <div class="stockSymbol">
+          {{ symbol }}
+        </div>
+        <div class="stockPriceLine" horizontal layout center center-justified>
+          <span>{{ DaysLow }}</span>
+          <span>{{ LastTradePriceOnly }}</span>
+          <span>{{ DaysHigh }}<span>
+        </div>
+      </template>
     </div>
   </template>
 
@@ -121,12 +132,10 @@
         if (!response || !response.query || !response.query.results || !response.query.results.quote) {
           alert('failed to get stocks');
         } else {
-          this.stockOne = response.query.results.quote[0].symbol;
-          this.stockOnePrice = response.query.results.quote[0].Bid;
-          this.stockTwo = response.query.results.quote[1].symbol;
-          this.stockTwoPrice = response.query.results.quote[1].Bid;
-          this.stockThree = response.query.results.quote[2].symbol;
-          this.stockThreePrice = response.query.results.quote[2].Bid;
+          this.stocks = [];
+          for (var i = 0; i < Math.min(3, response.query.results.quote.length); i++) {
+            this.stocks.push(_.pick(response.query.results.quote[i], 'symbol', 'LastTradePriceOnly', 'DaysLow', 'DaysHigh'));
+          }
         }
       }
 
