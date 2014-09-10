@@ -11,11 +11,12 @@
     padding: 10px;
   }
 
-  .stockLink {
+  .stockSymbol a {
+    color: #000;
     text-decoration: none;
   }
 
-  .stockLink:hover {
+  .stockSymbol a:hover {
     text-decoration: underline;
   }
 
@@ -66,7 +67,7 @@
     <div class="cardFace" vertical layout center center-justified>
       <template repeat="{{ stocks }}">
         <div class="stockSymbol">
-          {{ symbol }}
+          <a target="_blank" href="https://finance.yahoo.com/q?s={{ symbol }}">{{ symbol }}</a>
         </div>
         <div class="stockPriceLine" horizontal layout center center-justified>
           <span>{{ DaysLow }}</span>

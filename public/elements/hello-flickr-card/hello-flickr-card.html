@@ -1,0 +1,72 @@
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../../bower_components/polymer-jsonp/polymer-jsonp.html">
+
+<core-style id="helloFlickrCardStyle">
+
+  .cardFace {
+    padding: 10px;
+    height: 280px;
+    background-image: url({{ g.flickrImageUrl }});
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+</core-style>
+
+<polymer-element extends="hello-card" name="hello-flickr-card">
+  <template>
+    <core-style ref="helloFlickrCardStyle"></core-style>
+
+    <div class="cardFace" on-click="{{ alertMeDog }}">
+      <polymer-jsonp id="jsonpFlickr"></polymer-jsonp>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer('hello-flickr-card', {
+
+      ready: function() {
+        this.super();
+        this.loadFlickrAsync();
+      },
+
+      alertMeDog: function() {
+        alert("asdfasdf");
+      },
+
+      loadFlickrAsync: function() {
+        var jsonpFlickr = this.$.jsonpFlickr;
+        var pleaseDontStealMyId = '46e00ad4a925868cd4f4b6c25238c4be';
+        jsonpFlickr.url = 'https://api.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=' +
+                            pleaseDontStealMyId + '&format=json&jsoncallback=';
+        this.addEventListener('polymer-response', this.handleJsonpResponse);
+        jsonpFlickr.go();
+      },
+
+      handleJsonpResponse: function() {
+        if (this.$.jsonpFlickr.response &&
+            this.$.jsonpFlickr.response.photos &&
+            this.$.jsonpFlickr.response.photos.photo &&
+            this.$.jsonpFlickr.response.photos.photo.length > 0) {
+            var index = Math.floor(Math.random() * this.$.jsonpFlickr.response.photos.photo.length);
+            var p = this.$.jsonpFlickr.response.photos.photo[index];
+            this.imgUrl = 'https://farm' +
+                          p.farm +
+                          '.staticflickr.com/' +
+                          p.server +
+                          '/' +
+                          p.id +
+                          '_' +
+                          p.secret +
+                          '_z.jpg';
+            var style1 = document.getElementById('helloFlickrCardStyle');
+
+            CoreStyle.g.flickrImageUrl = this.imgUrl;
+        }
+      }
+    });
+
+  </script>
+
+</polymer-element>
