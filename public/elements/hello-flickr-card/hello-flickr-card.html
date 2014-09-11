@@ -6,9 +6,17 @@
   .cardFace {
     padding: 10px;
     height: 280px;
-    background-image: url({{ g.flickrImageUrl }});
+    background-image: url({{ flickrImageUrl }});
     background-repeat: no-repeat;
     background-size: cover;
+  }
+
+  a {
+    text-decoration: none;
+    border: none;
+    display: block;
+    height: 100%;
+    width: 100%;
   }
 
 </core-style>
@@ -16,9 +24,9 @@
 <polymer-element extends="hello-card" name="hello-flickr-card">
   <template>
     <core-style ref="helloFlickrCardStyle"></core-style>
-
-    <div class="cardFace" on-click="{{ alertMeDog }}">
+    <div class="cardFace">
       <polymer-jsonp id="jsonpFlickr"></polymer-jsonp>
+      <a href="{{ pageUrl }}" target="blank">&nbsp;</a>
     </div>
   </template>
 
@@ -29,10 +37,6 @@
       ready: function() {
         this.super();
         this.loadFlickrAsync();
-      },
-
-      alertMeDog: function() {
-        alert("asdfasdf");
       },
 
       loadFlickrAsync: function() {
@@ -51,7 +55,7 @@
             this.$.jsonpFlickr.response.photos.photo.length > 0) {
             var index = Math.floor(Math.random() * this.$.jsonpFlickr.response.photos.photo.length);
             var p = this.$.jsonpFlickr.response.photos.photo[index];
-            this.imgUrl = 'https://farm' +
+            CoreStyle.list['helloFlickrCardStyle'].flickrImageUrl = 'https://farm' +
                           p.farm +
                           '.staticflickr.com/' +
                           p.server +
@@ -60,9 +64,10 @@
                           '_' +
                           p.secret +
                           '_z.jpg';
-            var style1 = document.getElementById('helloFlickrCardStyle');
-
-            CoreStyle.g.flickrImageUrl = this.imgUrl;
+            this.pageUrl = 'https://www.flickr.com/photos/' +
+                           p.owner +
+                           '/' +
+                           p.id;
         }
       }
     });
@@ -70,3 +75,7 @@
   </script>
 
 </polymer-element>
+
+<script>
+  document._currentScript.ownerDocument.getElementById('helloFlickrCardStyle').flickrImageUrl = 'http://i.stack.imgur.com/gtEKJ.jpg?s=32&g=1';
+</script>
