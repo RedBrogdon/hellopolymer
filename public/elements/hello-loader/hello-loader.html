@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/core-style/core-style.html">
+
+<core-style id="helloLoaderStyle">
+
+  #container {
+    height: 100%;
+    width: 100%;
+  }
+
+  #loader {
+    height: 66%;
+    width: 66%;
+  }
+
+</core-style>
+
+
+<polymer-element name="hello-loader" attributes="visible">
+  <template>
+    <core-style ref="helloLoaderStyle"></core-style>
+    <template if="{{ visible }}">
+      <div id="container" vertical layout center center-justified>
+        <img id="loader" src="/img/loader.svg">
+      </div>
+    </template>
+  </template>
+
+  <script>
+
+    Polymer('hello-loader');
+
+  </script>
+</polymer-element>

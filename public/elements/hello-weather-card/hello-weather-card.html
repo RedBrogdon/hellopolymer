@@ -1,8 +1,9 @@
-<link rel="import" href="../hello-card/hello-card.html">
-<link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
 <link rel="import" href="../../bower_components/polymer-jsonp/polymer-jsonp.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
+<link rel="import" href="../hello-loader/hello-loader.html">
 
 <core-style id="hello-weather-card">
 
@@ -29,6 +30,7 @@
   <template>
     <core-style ref="hello-weather-card"></core-style>
     <core-localstorage on-core-localstorage-load="{{ onSettingsLoaded }}" id="settingsStorage" name="hello-weather-card-storage" value="{{ settings }}"></core-localstorage>
+    <polymer-jsonp id="jsonpWeather"></polymer-jsonp>
 
     <hello-dialog on-ok="{{ settingsOkHandler }}" id="settingsDialog">
       <hello-settings-dialog-content id="settingsDialogContent" cardName="Weather">
@@ -36,19 +38,22 @@
       </hello-settings-dialog-content>
     </hello-dialog>
 
-    <div class="cardFace">
-      <polymer-jsonp id="jsonpWeather"></polymer-jsonp>
-      <h1>{{ cityName }}</h1>
-      <table>
-        <template repeat="{{ day in days }}">
-          <tr>
-            <td>{{ day.name }}</td>
-            <td><img alt="{{ day.weatherDesc }}" src="{{ '/elements/hello-weather-card/svg/' + day.weatherType + '.svg' }}" /></td>
-            <td>{{ day.lowTemp }}/{{ day.highTemp }}</td>
-          </tr>
-        </template>
-      </table>
-    </div>
+    <hello-loader visible="{{ !days }}"></hello-loader>
+
+    <template if="{{ days }}">
+      <div class="cardFace">
+        <h1>{{ cityName }}</h1>
+        <table>
+          <template repeat="{{ day in days }}">
+            <tr>
+              <td>{{ day.name }}</td>
+              <td><img alt="{{ day.weatherDesc }}" src="{{ '/elements/hello-weather-card/svg/' + day.weatherType + '.svg' }}" /></td>
+              <td>{{ day.lowTemp }}/{{ day.highTemp }}</td>
+            </tr>
+          </template>
+        </table>
+      </div>
+    </template>
   </template>
 
   <script>

@@ -1,5 +1,6 @@
 <link rel="import" href="../hello-card/hello-card.html">
 <link rel="import" href="../hello-settings-dialog/hello-settings-dialog.html">
+<link rel="import" href="../hello-loader/hello-loader.html">
 <link rel="import" href="../../bower_components/polymer-jsonp/polymer-jsonp.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/core-localstorage/core-localstorage.html">
@@ -64,18 +65,22 @@
       </hello-settings-dialog-content>
     </hello-dialog>
 
-    <div class="cardFace" vertical layout center center-justified>
-      <template repeat="{{ stocks }}">
-        <div class="stockSymbol">
-          <a target="_blank" href="https://finance.yahoo.com/q?s={{ symbol }}">{{ symbol }}</a>
-        </div>
-        <div class="stockPriceLine" horizontal layout center center-justified>
-          <span flex>{{ DaysLow }}</span>
-          <span>{{ LastTradePriceOnly }}</span>
-          <span flex>{{ DaysHigh }}<span>
-        </div>
-      </template>
-    </div>
+    <hello-loader visible="{{ !stocks }}"></hello-loader>
+
+    <template if="{{ stocks }}">
+      <div class="cardFace" vertical layout center center-justified>
+        <template repeat="{{ stocks }}">
+          <div class="stockSymbol">
+            <a target="_blank" href="https://finance.yahoo.com/q?s={{ symbol }}">{{ symbol }}</a>
+          </div>
+          <div class="stockPriceLine" horizontal layout center center-justified>
+            <span flex>{{ DaysLow }}</span>
+            <span>{{ LastTradePriceOnly }}</span>
+            <span flex>{{ DaysHigh }}<span>
+          </div>
+        </template>
+      </div>
+    </template>
   </template>
 
   <script>

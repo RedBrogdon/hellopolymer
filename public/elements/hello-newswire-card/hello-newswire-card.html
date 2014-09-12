@@ -1,8 +1,9 @@
-<link rel="import" href="../hello-card/hello-card.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../../bower_components/core-pages/core-pages.html">
 <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../hello-card/hello-card.html">
+<link rel="import" href="../hello-loader/hello-loader.html">
 
 <core-style id="helloNewswireCardStyle">
 
@@ -48,50 +49,53 @@
     <core-ajax on-core-error="{{ handleAjaxError }}" on-core-response="{{ handleAjaxResponse }}"
       auto url="/info/NYTNewswire" handleAs="json" id="ajaxNewswire"></core-ajax>
 
+    <hello-loader visible="{{ !articles }}"></hello-loader>
 
-    <div class="cardFace">
-      <core-pages id="articlePages" selected="{{ selectedPage }}">
-        <div>
-          <h3>NYT Headlines</h3>
-          <ul>
-            <template repeat="{{ article in articles[0] }}">
-              <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
-            </template>
-          </ul>
-        </div>
-        <div>
-          <h3>NYT Headlines</h3>
-          <ul>
-            <template repeat="{{ article in articles[1] }}">
-              <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
-            </template>
-          </ul>
-        </div>
-        <div>
-          <h3>NYT Headlines</h3>
-          <ul>
-            <template repeat="{{ article in articles[2] }}">
-              <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
-            </template>
-          </ul>
-        </div>
-        <div>
-          <h3>NYT Headlines</h3>
-          <ul>
-            <template repeat="{{ article in articles[3] }}">
-              <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
-            </template>
-          </ul>
-        </div>
-      </core-pages>
+    <template if="{{ articles }}">
+      <div class="cardFace">
+        <core-pages id="articlePages" selected="{{ selectedPage }}">
+          <div>
+            <h3>NYT Headlines</h3>
+            <ul>
+              <template repeat="{{ article in articles[0] }}">
+                <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
+              </template>
+            </ul>
+          </div>
+          <div>
+            <h3>NYT Headlines</h3>
+            <ul>
+              <template repeat="{{ article in articles[1] }}">
+                <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
+              </template>
+            </ul>
+          </div>
+          <div>
+            <h3>NYT Headlines</h3>
+            <ul>
+              <template repeat="{{ article in articles[2] }}">
+                <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
+              </template>
+            </ul>
+          </div>
+          <div>
+            <h3>NYT Headlines</h3>
+            <ul>
+              <template repeat="{{ article in articles[3] }}">
+                <li><a class="newswireLink" target="_blank" href="{{ article.url}}" title="{{ article.abstract }}">{{ article.title }}</a></li>
+              </template>
+            </ul>
+          </div>
+        </core-pages>
 
-      <paper-radio-group id="pager" selected="{{ selectedPage }}">
-        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
-        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
-        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
-        <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
-      </paper-radio-group>
-    </div>
+        <paper-radio-group id="pager" selected="{{ selectedPage }}">
+          <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+          <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+          <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+          <paper-radio-button on-click="{{ radioClickHandler }}"></paper-radio-button>
+        </paper-radio-group>
+      </div>
+    </template>
   </template>
 
   <script>
@@ -100,30 +104,32 @@
 
       ready: function() {
         this.selectedPage = 0;
+        this.numPages = 4;
         this.carouselRunning = true;
         this.super();
-        this.async(this.stepCarousel, null, 7500);
       },
 
       handleAjaxResponse: function(e) {
         this.articles = [];
         var i;
 
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < this.numPages; i++) {
           this.articles.push([]);
         }
 
-        for (i = 0; i < Math.min(20, e.detail.response.length); i++) {
+        for (i = 0; i < Math.min(this.numPages * 5, e.detail.response.length); i++) {
           this.articles[Math.floor(i / 5)].push(e.detail.response[i]);
         }
+
+        this.async(this.stepCarousel, null, 7500);
       },
 
       handleAjaxError: function(e) {
-        alert('Failed to load newswire.');
+        console.log('Failed to load newswire.');
       },
 
       showNextPage: function() {
-        this.$.articlePages.selected = (this.$.articlePages.selected + 1) % this.$.articlePages.children.length;
+        this.selectedPage = (this.selectedPage + 1) % this.numPages;
       },
 
       radioClickHandler: function() {
@@ -132,7 +138,7 @@
 
       stepCarousel: function() {
         if (this.carouselRunning) {
-          this.selectedPage = (this.selectedPage + 1) % this.$.articlePages.children.length
+          this.selectedPage = (this.selectedPage + 1) % this.numPages;
           this.async(this.stepCarousel, null, 7500);
         }
       }
