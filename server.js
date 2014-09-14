@@ -1,5 +1,3 @@
-
-// Set Dev as the default config unless told otherwise by command line arguments
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var express = require('express'),
@@ -12,6 +10,13 @@ var express = require('express'),
     config = require('./config/config'),
     LRU = require('lru-cache');
 
+var serverAddress = process.env.OPENSHIFT_NODEJS_IP;
+var serverPort = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+if (typeof serverAddress === "undefined") {
+    console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
+    serverAddress = "127.0.0.1";
+};
 
 function logErrors(err, req, res, next) {
   console.error(err.stack);
@@ -75,6 +80,6 @@ app.use(errorHandler);
 
 // Run server
 
-var server = app.listen(3000, function() {
-    console.log('Listening on port %d', server.address().port);
+var server = app.listen(serverPort, serverAddress, function() {
+    console.log('Listening on port %d of %s', server.address().port, serverAddress);
 });
