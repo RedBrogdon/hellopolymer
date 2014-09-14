@@ -94,8 +94,29 @@
       },
 
       onSettingsLoaded: function() {
-        if (this.settings === 'undefined') {
-          this.settings = {};
+        if (!this.settings || (this.settings === 'undefined')) {
+          this.settings = {
+            shortcut1Name: 'Reddit',
+            shortcut1Url: 'http://reddit.com',
+            shortcut2Name: 'Facebook',
+            shortcut2Url: 'http://facebook.com',
+            shortcut3Name: 'Google News',
+            shortcut3Url: 'http://news.google.com',
+            shortcut4Name: 'Youtube',
+            shortcut4Url: 'http://youtube.com',
+            shortcut5Name: 'ESPN',
+            shortcut5Url: 'http://espn.com',
+            shortcut6Name: 'Twitter',
+            shortcut6Url: 'http://twitter.com',
+            shortcut7Name: 'Yahoo!',
+            shortcut7Url: 'http://yahoo.com',
+            shortcut8Name: 'Metacritic',
+            shortcut8Url: 'http://metacritic.com',
+            shortcut9Name: 'Evernote',
+            shortcut9Url: 'http://evernote.com',
+            shortcut10Name: 'Github',
+            shortcut10Url: 'http://github.com',
+          }
         }
       },
 

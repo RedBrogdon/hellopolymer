@@ -77,7 +77,7 @@
       },
 
       onSettingsLoaded: function() {
-        if (this.settings === 'undefined') {
+        if (!this.settings || (this.settings === 'undefined')) {
           this.settings = { userLocation: 'Santa Clara, CA' };
         }
       },

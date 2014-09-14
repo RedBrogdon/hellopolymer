@@ -106,7 +106,7 @@
       },
 
       onSettingsLoaded: function() {
-        if (this.settings === 'undefined') {
+        if (!this.settings || (this.settings === 'undefined')) {
           this.settings = { stockOne: 'GOOG', stockTwo: 'MSFT', stockThree: 'APPL' };
         }
       },
