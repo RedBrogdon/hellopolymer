@@ -15,7 +15,7 @@
 </core-style>
 
 
-<polymer-element name="hello-loader" attributes="visible">
+<polymer-element name="hello-loader" attributes="visible" noscript>
   <template>
     <core-style ref="helloLoaderStyle"></core-style>
     <template if="{{ visible }}">
@@ -24,10 +24,4 @@
       </div>
     </template>
   </template>
-
-  <script>
-
-    Polymer('hello-loader');
-
-  </script>
 </polymer-element>
