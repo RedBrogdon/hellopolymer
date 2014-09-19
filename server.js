@@ -8,7 +8,9 @@ var express = require('express'),
     router = express.Router(),
     swig = require('swig'),
     config = require('./config/config'),
-    LRU = require('lru-cache');
+    LRU = require('lru-cache'),
+    favicon = require('serve-favicon'),
+    path = require('path');
 
 var serverAddress = process.env.OPENSHIFT_NODEJS_IP;
 var serverPort = process.env.OPENSHIFT_NODEJS_PORT || 8080;
@@ -51,7 +53,7 @@ require('./app/routes/info.js')(router);
 
 // Set up Swig
 
-swig.setDefaults({ cache: false });
+swig.setDefaults({ cache: (process.env.NODE_ENV == 'development') ? false : true });
 
 app.engine('html', swig.renderFile);
 
@@ -60,6 +62,8 @@ app.set('views', __dirname + '/app/views');
 
 
 // Set up middleware
+
+app.use(favicon(path.join(__dirname, 'public', 'img', 'icon', 'favicon.ico')));
 
 app.use(express.static(__dirname + '/public'));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));

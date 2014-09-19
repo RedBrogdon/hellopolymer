@@ -20,7 +20,7 @@
 			}
 
 		</style>
-		<core-overlay id="overlay" layered backdrop opened="{{opened}}" autoCloseDisabled="{{autoCloseDisabled}}"  transition="core-transition-center">
+		<core-overlay id="overlay" layered backdrop opened="{{ opened }}" autoCloseDisabled="{{ autoCloseDisabled }}"  transition="core-transition-center">
 		  <content></content>
     </core-overlay>
 	</template>
@@ -61,18 +61,13 @@
   	Polymer('hello-settings-dialog-content', {
 
       ready: function() {
-        if (this.parentNode.tagName.toLowerCase() != 'hello-dialog') {
+        if (this.parentNode && (this.parentNode.tagName.toLowerCase() != 'hello-dialog')) {
           console.log('A hello-settings-dialog-content element\'s parent must be a hello-dialog element.');
         }
       },
 
       okHandler: function() {
         this.fire('ok', {});
-        this.parentNode.hideDialog();
-      },
-
-      cancelHandler: function() {
-        this.parentNode.hideDialog();
       }
 
 	  });

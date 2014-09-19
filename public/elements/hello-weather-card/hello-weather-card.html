@@ -73,6 +73,7 @@
       },
 
       settingsOkHandler: function() {
+        this.$.settingsDialog.hideDialog();
         this.$.settingsStorage.save(); // necessary because we're using an object as the value to be stored, and the ref doesn't change
       },
 
