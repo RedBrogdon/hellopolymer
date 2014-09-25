@@ -20,6 +20,9 @@ if (typeof serverAddress === "undefined") {
     serverAddress = "127.0.0.1";
 };
 
+console.log('Environment name: "' + process.env.NODE_ENV + '"');
+console.log('Intended to run on port %d of %d', serverPort, serverAddress);
+
 function logErrors(err, req, res, next) {
   console.error(err.stack);
   next(err);
@@ -53,7 +56,7 @@ require('./app/routes/info.js')(router);
 
 // Set up Swig
 
-swig.setDefaults({ cache: (process.env.NODE_ENV == 'development') ? false : true });
+swig.setDefaults({ cache: (process.env.NODE_ENV == 'development') ? false : 'memory' });
 
 app.engine('html', swig.renderFile);
 
